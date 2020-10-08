@@ -1,0 +1,43 @@
+<div id="pagination"></div>
+
+<script>
+let begin // 起始頁碼
+let end // 結束頁碼
+
+const page = Number((new URLSearchParams(window.location.search)).get('page')) || 1; // 當前頁碼
+
+const totalRecords = 360 // 總資料的筆數
+const displayRecords = 30 // 顯示資料的筆數
+
+const totalPages = Math.ceil(totalRecords / displayRecords) // 總頁碼的數量
+const displayPages = 7 // 顯示頁碼的數量
+
+const eachSide = (displayPages - 1) / 2 // 頁碼一側的數量
+
+if (totalPages > displayPages) {
+	switch (true) {
+		case page <= eachSide: // 前段
+			begin = 1
+			end = displayPages
+		break
+		case page >= (totalPages - eachSide): // 後段
+			begin = totalPages - eachSide * 2
+			end = totalPages
+		break
+		default: // 中段
+			begin = page - eachSide
+			end = page + eachSide
+	}
+} else {
+	begin = 1
+	end = totalPages
+}
+
+let numbers = ''
+
+for (let i = begin; i <= end; i++) {
+    numbers += `<a href="?page=${i}">${i}</a> `
+}
+
+document.getElementById('pagination').innerHTML = numbers
+</script>
